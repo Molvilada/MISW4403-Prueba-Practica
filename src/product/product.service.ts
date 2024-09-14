@@ -6,13 +6,15 @@ import {
   BusinessError,
   BusinessLogicException,
 } from 'src/shared/errors/business-errors';
-import { Messages, PRODUCT_TYPES } from './constants';
+import { INCORRECT_TYPE_MSG, PRODUCT_TYPES } from './constants';
+import { notFoundMsg } from '../shared/utils';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
+    private resource: String = 'product',
   ) {}
 
   async findAll(): Promise<ProductEntity[]> {
@@ -28,7 +30,7 @@ export class ProductService {
     });
     if (!product)
       throw new BusinessLogicException(
-        Messages.NOT_FOUND_MSG,
+        notFoundMsg(this.resource),
         BusinessError.NOT_FOUND,
       );
 
@@ -38,7 +40,7 @@ export class ProductService {
   async create(product: ProductEntity): Promise<ProductEntity> {
     if (!PRODUCT_TYPES.includes(product.type))
       throw new BusinessLogicException(
-        Messages.INCORRECT_TYPE_MSG,
+        INCORRECT_TYPE_MSG,
         BusinessError.BAD_REQUEST,
       );
     return await this.productRepository.save(product);
@@ -52,13 +54,13 @@ export class ProductService {
 
     if (!persistedProduct)
       throw new BusinessLogicException(
-        Messages.NOT_FOUND_MSG,
+        notFoundMsg(this.resource),
         BusinessError.NOT_FOUND,
       );
 
     if (!PRODUCT_TYPES.includes(product.type))
       throw new BusinessLogicException(
-        Messages.INCORRECT_TYPE_MSG,
+        INCORRECT_TYPE_MSG,
         BusinessError.BAD_REQUEST,
       );
     product.id = id;
@@ -72,7 +74,7 @@ export class ProductService {
     });
     if (!product)
       throw new BusinessLogicException(
-        Messages.NOT_FOUND_MSG,
+        notFoundMsg(this.resource),
         BusinessError.NOT_FOUND,
       );
 
