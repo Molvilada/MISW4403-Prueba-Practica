@@ -39,11 +39,11 @@ export class ProductService {
   }
 
   async create(product: ProductEntity): Promise<ProductEntity> {
-    if (!PRODUCT_TYPES.includes(product.type))
-      throw new BusinessLogicException(
-        INCORRECT_TYPE_MSG,
-        BusinessError.BAD_REQUEST,
-      );
+    // if (!PRODUCT_TYPES.includes(product.type))
+    //   throw new BusinessLogicException(
+    //     INCORRECT_TYPE_MSG,
+    //     BusinessError.BAD_REQUEST,
+    //   );
     return await this.productRepository.save(product);
   }
 
@@ -59,11 +59,11 @@ export class ProductService {
         BusinessError.NOT_FOUND,
       );
 
-    if (!PRODUCT_TYPES.includes(product.type))
-      throw new BusinessLogicException(
-        INCORRECT_TYPE_MSG,
-        BusinessError.BAD_REQUEST,
-      );
+    // if (!PRODUCT_TYPES.includes(product.type))
+    //   throw new BusinessLogicException(
+    //     INCORRECT_TYPE_MSG,
+    //     BusinessError.BAD_REQUEST,
+    //   );
     product.id = id;
 
     return await this.productRepository.save(product);
