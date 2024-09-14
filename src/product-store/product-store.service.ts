@@ -32,7 +32,7 @@ export class ProductStoreService {
     });
     if (!store)
       throw new BusinessLogicException(
-        notFoundMsg(this.RESOURCE_PRODUCT),
+        notFoundMsg(this.RESOURCE_STORE),
         BusinessError.NOT_FOUND,
       );
 
@@ -42,7 +42,7 @@ export class ProductStoreService {
     });
     if (!product)
       throw new BusinessLogicException(
-        notFoundMsg(this.RESOURCE_STORE),
+        notFoundMsg(this.RESOURCE_PRODUCT),
         BusinessError.NOT_FOUND,
       );
 
