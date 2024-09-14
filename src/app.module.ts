@@ -6,11 +6,13 @@ import { StoreModule } from './store/store.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductEntity } from './product/product.entity';
 import { StoreEntity } from './store/store.entity';
+import { ProductStoreModule } from './product-store/product-store.module';
 
 @Module({
   imports: [
     ProductModule,
     StoreModule,
+    ProductStoreModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

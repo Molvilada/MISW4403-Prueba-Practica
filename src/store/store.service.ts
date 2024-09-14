@@ -5,32 +5,30 @@ import { Repository } from 'typeorm';
 import {
   BusinessError,
   BusinessLogicException,
-} from 'src/shared/errors/business-errors';
+} from '../shared/errors/business-errors';
 import { cityRegex, INCORRECT_CITY_MSG } from './constants';
 import { notFoundMsg } from '../shared/utils';
 
 @Injectable()
 export class StoreService {
+  private readonly RESOURCE: string = 'store';
+
   constructor(
     @InjectRepository(StoreEntity)
     private readonly storeRepository: Repository<StoreEntity>,
-    private resource: String = 'store',
   ) {}
 
   async findAll(): Promise<StoreEntity[]> {
-    return await this.storeRepository.find({
-      relations: ['products'],
-    });
+    return await this.storeRepository.find({});
   }
 
   async findOne(id: string): Promise<StoreEntity> {
     const store: StoreEntity = await this.storeRepository.findOne({
       where: { id },
-      relations: ['products'],
     });
     if (!store)
       throw new BusinessLogicException(
-        notFoundMsg(this.resource),
+        notFoundMsg(this.RESOURCE),
         BusinessError.NOT_FOUND,
       );
 
@@ -53,7 +51,7 @@ export class StoreService {
 
     if (!persistedStore)
       throw new BusinessLogicException(
-        notFoundMsg(this.resource),
+        notFoundMsg(this.RESOURCE),
         BusinessError.NOT_FOUND,
       );
 
@@ -73,7 +71,7 @@ export class StoreService {
     });
     if (!store)
       throw new BusinessLogicException(
-        notFoundMsg(this.resource),
+        notFoundMsg(this.RESOURCE),
         BusinessError.NOT_FOUND,
       );
 

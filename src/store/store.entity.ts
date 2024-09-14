@@ -22,6 +22,5 @@ export class StoreEntity {
   address: string;
 
   @ManyToMany(() => ProductEntity, (product) => product.stores)
-  @JoinTable()
   products: ProductEntity[];
 }
