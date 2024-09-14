@@ -6,7 +6,6 @@ import {
   BusinessError,
   BusinessLogicException,
 } from '../shared/errors/business-errors';
-import { cityRegex, INCORRECT_CITY_MSG } from './constants';
 import { notFoundMsg } from '../shared/utils';
 
 @Injectable()

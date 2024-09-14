@@ -6,7 +6,6 @@ import {
   BusinessError,
   BusinessLogicException,
 } from '../shared/errors/business-errors';
-import { INCORRECT_TYPE_MSG, PRODUCT_TYPES } from './constants';
 import { notFoundMsg } from '../shared/utils';
 
 @Injectable()
