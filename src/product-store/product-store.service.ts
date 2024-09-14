@@ -7,7 +7,7 @@ import {
 } from '../shared/errors/business-errors';
 import { StoreEntity } from '../store/store.entity';
 import { Repository } from 'typeorm';
-import { notFoundMsg } from 'src/shared/utils';
+import { notFoundMsg } from '../shared/utils';
 import { NOT_ASSOCIATED_MSG } from './constants';
 
 @Injectable()

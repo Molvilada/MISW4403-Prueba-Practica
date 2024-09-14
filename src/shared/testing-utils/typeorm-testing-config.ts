@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductEntity } from 'src/product/product.entity';
-import { StoreEntity } from 'src/store/store.entity';
+import { ProductEntity } from '../../product/product.entity';
+import { StoreEntity } from '../../store/store.entity';
 
 export const TypeOrmTestingConfig = () => [
   TypeOrmModule.forRoot({
