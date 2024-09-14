@@ -36,11 +36,6 @@ export class StoreService {
   }
 
   async create(store: StoreEntity): Promise<StoreEntity> {
-    if (!cityRegex.test(store.city))
-      throw new BusinessLogicException(
-        INCORRECT_CITY_MSG,
-        BusinessError.BAD_REQUEST,
-      );
     return await this.storeRepository.save(store);
   }
 
@@ -55,11 +50,6 @@ export class StoreService {
         BusinessError.NOT_FOUND,
       );
 
-    if (!cityRegex.test(store.city))
-      throw new BusinessLogicException(
-        INCORRECT_CITY_MSG,
-        BusinessError.BAD_REQUEST,
-      );
     store.id = id;
 
     return await this.storeRepository.save(store);

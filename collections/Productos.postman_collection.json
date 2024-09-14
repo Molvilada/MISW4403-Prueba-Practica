@@ -1,0 +1,550 @@
+{
+	"info": {
+		"_postman_id": "7a72bc1b-c7f7-499e-9fe0-bb4005427cbc",
+		"name": "Productos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29422849",
+		"_collection_link": "https://www.postman.com/bold-flare-296231/workspace/misw4403-prueba-practica/collection/29422849-7a72bc1b-c7f7-499e-9fe0-bb4005427cbc?action=share&source=collection_link&creator=29422849"
+	},
+	"item": [
+		{
+			"name": "Crear un producto válido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const types = ['Perecedero', 'No perecedero'];\r",
+							"const randomType = types[Math.floor(Math.random() * types.length)]\r",
+							"\r",
+							"pm.collectionVariables.set('product_name', pm.variables.replaceIn('{{$randomDepartment}}'));\r",
+							"pm.collectionVariables.set('product_price', pm.variables.replaceIn('{{$randomInt}}'));\r",
+							"pm.collectionVariables.set('product_type', randomType);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should have a string as id\", function () {\r",
+							"    pm.expect(data.id).to.be.a(\"string\");\r",
+							"    pm.collectionVariables.set(\"product_id\", data.id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"name should match\", function () {\r",
+							"    pm.expect(data.name).to.eql(pm.collectionVariables.get(\"product_name\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"price should match\", function () {\r",
+							"    pm.expect(data.price).to.eql(Number(pm.collectionVariables.get(\"product_price\")));\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"type should match\", function () {\r",
+							"    pm.expect(data.type).to.eql(pm.collectionVariables.get(\"product_type\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{product_name}}\",\r\n    \"type\": \"{{product_type}}\",\r\n    \"price\": {{product_price}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/products",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear un producto inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   pm.expect(data.message[0]).to.eql(\"The product type is incorrect, it must be: Perecedero, No perecedero\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Nombre\",\r\n    \"type\": \"Invalid type\",\r\n    \"price\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/products",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todos los productos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Number of products > 0', function () {\r",
+							"   pm.expect(data.length).to.greaterThan(0)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/products",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener un producto por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should have a string as id\", function () {\r",
+							"    pm.expect(data.id).to.be.a(\"string\");\r",
+							"    pm.collectionVariables.set(\"product_id\", data.id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"name should match\", function () {\r",
+							"    pm.expect(data.name).to.eql(pm.collectionVariables.get(\"product_name\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"price should match\", function () {\r",
+							"    pm.expect(data.price).to.eql(Number(pm.collectionVariables.get(\"product_price\")));\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"type should match\", function () {\r",
+							"    pm.expect(data.type).to.eql(pm.collectionVariables.get(\"product_type\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/products/{{product_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener un producto por un ID que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   pm.expect(data.message).to.eql(\"The product with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('invalid_resource', pm.variables.replaceIn('{{$randomUUID}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/products/{{invalid_resource}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products",
+						"{{invalid_resource}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar un producto",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const types = ['Perecedero', 'No perecedero'];\r",
+							"const randomType = types[Math.floor(Math.random() * types.length)]\r",
+							"\r",
+							"pm.collectionVariables.set('product_new_name', pm.variables.replaceIn('{{$randomDepartment}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should have a string as id\", function () {\r",
+							"    pm.expect(data.id).to.be.a(\"string\");\r",
+							"    pm.collectionVariables.set(\"product_id\", data.id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"name should match\", function () {\r",
+							"    pm.expect(data.name).to.eql(pm.collectionVariables.get(\"product_new_name\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"price should match\", function () {\r",
+							"    pm.expect(data.price).to.eql(Number(pm.collectionVariables.get(\"product_price\")));\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"type should match\", function () {\r",
+							"    pm.expect(data.type).to.eql(pm.collectionVariables.get(\"product_type\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{product_new_name}}\",\r\n    \"type\": \"{{product_type}}\",\r\n    \"price\": {{product_price}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/products/{{product_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar un producto con un ID que no existe",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const types = ['Perecedero', 'No perecedero'];\r",
+							"const randomType = types[Math.floor(Math.random() * types.length)]\r",
+							"\r",
+							"pm.collectionVariables.set('product_new_name', pm.variables.replaceIn('{{$randomDepartment}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   pm.expect(data.message[0]).to.eql(\"The product type is incorrect, it must be: Perecedero, No perecedero\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{product_new_name}}\",\r\n    \"type\": \"Invalid type\",\r\n    \"price\": {{product_price}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/products/{{product_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar un producto por su ID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/products/{{product_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar un producto con un ID que no existe",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('invalid_resource', pm.variables.replaceIn('{{$randomUUID}}'));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   pm.expect(data.message).to.eql(\"The product with the given id was not found\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/products/{{product_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products",
+						"{{product_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "product_name",
+			"value": ""
+		},
+		{
+			"key": "product_price",
+			"value": ""
+		},
+		{
+			"key": "product_type",
+			"value": ""
+		},
+		{
+			"key": "product_id",
+			"value": ""
+		},
+		{
+			"key": "invalid_resource",
+			"value": ""
+		},
+		{
+			"key": "product_new_name",
+			"value": ""
+		}
+	]
+}

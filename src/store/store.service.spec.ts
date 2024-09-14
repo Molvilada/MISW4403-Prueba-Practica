@@ -88,21 +88,6 @@ describe('StoreService', () => {
     expect(storedStore.address).toEqual(store.address);
   });
 
-  it('create should throw an exception for an invalid city store', async () => {
-    const store: StoreEntity = {
-      id: '',
-      name: faker.company.name(),
-      address: faker.location.streetAddress(),
-      city: 'Invalid city',
-      products: [],
-    };
-
-    await expect(() => service.create(store)).rejects.toHaveProperty(
-      'message',
-      INCORRECT_CITY_MSG,
-    );
-  });
-
   it('update should modify a store', async () => {
     const store: StoreEntity = storesList[0];
     store.name = 'New name';
@@ -126,18 +111,6 @@ describe('StoreService', () => {
     await expect(() => service.update('0', store)).rejects.toHaveProperty(
       'message',
       notFoundMsg(RESOURCE),
-    );
-  });
-
-  it('update should throw an exception for an invalid type store', async () => {
-    let store: StoreEntity = storesList[0];
-    store = {
-      ...store,
-      city: 'Invalid city',
-    };
-    await expect(() => service.update(store.id, store)).rejects.toHaveProperty(
-      'message',
-      INCORRECT_CITY_MSG,
     );
   });
 

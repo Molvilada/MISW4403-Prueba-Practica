@@ -89,21 +89,6 @@ describe('ProductService', () => {
     expect(storedProduct.type).toEqual(product.type);
   });
 
-  // it('create should throw an exception for an invalid type product', async () => {
-  //   const product: ProductEntity = {
-  //     id: '',
-  //     name: faker.commerce.productName(),
-  //     price: parseFloat(faker.commerce.price({ min: 1, max: 1000 })),
-  //     type: 'Invalid type',
-  //     stores: [],
-  //   };
-
-  //   await expect(() => service.create(product)).rejects.toHaveProperty(
-  //     'message',
-  //     INCORRECT_TYPE_MSG,
-  //   );
-  // });
-
   it('update should modify a product', async () => {
     const product: ProductEntity = productsList[0];
     product.name = 'New name';
@@ -132,17 +117,6 @@ describe('ProductService', () => {
       notFoundMsg(RESOURCE),
     );
   });
-
-  // it('update should throw an exception for an invalid type product', async () => {
-  //   let product: ProductEntity = productsList[0];
-  //   product = {
-  //     ...product,
-  //     type: 'Invalid type',
-  //   };
-  //   await expect(() =>
-  //     service.update(product.id, product),
-  //   ).rejects.toHaveProperty('message', INCORRECT_TYPE_MSG);
-  // });
 
   it('delete should remove a product', async () => {
     const product: ProductEntity = productsList[0];
