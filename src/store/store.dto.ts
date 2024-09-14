@@ -6,7 +6,7 @@ export class StoreDto {
   @IsNotEmpty()
   readonly name: string;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
   @Matches(/^[A-Z]{3}$/, {
     message: INCORRECT_CITY_MSG,
