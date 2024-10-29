@@ -25,6 +25,10 @@ export class StoreController {
     return await this.storeService.findAll();
   }
 
+  async findAll2() {
+    return await this.storeService.findAll();
+  }
+
   @Get(':storeId')
   async findOne(@Param('storeId') storeId: string) {
     return await this.storeService.findOne(storeId);
